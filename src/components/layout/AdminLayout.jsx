@@ -2,32 +2,27 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import "../../vendor.css";
+import "../../dashboard.css";
 
-/**
- * AdminLayout
- * Top-level shell for all admin/vendor pages. Composes the Sidebar, Navbar,
- * and Footer around the page's own content (`children`).
- *
- * This replaces the old `pages/admin/layout.jsx`. The public API
- * (`pageTitle`, `breadcrumbs`, `children`) is unchanged, so existing pages
- * only need to update their import path — no other code changes required.
- *
- * Props:
- * - pageTitle: string shown in the Navbar heading
- * - breadcrumbs: array of breadcrumb labels for the Navbar
- * - children: page content rendered in the main workspace area
- */
-const AdminLayout = ({ children, pageTitle, breadcrumbs = [] }) => {
+const AdminLayout = ({ children, pageTitle, pageSubtitle }) => {
   return (
-    <div className="app-shell">
+    <div className="dashboard-container">
       <Sidebar />
-
-      <div className="main-content-area">
-        <Navbar pageTitle={pageTitle} breadcrumbs={breadcrumbs} />
-
-        <main className="workspace-wrapper">{children}</main>
-
+      <div className="content-layout">
+        <Navbar />
+        <main className="main-wrapper">
+          {/* FIXED: Dynamic Header Section exactly matching Admin Dashboard banner */}
+          {pageTitle && (
+            <div className="dashboard-header" style={{ marginBottom: "8px", paddingTop: "10px" }}> 
+              {/* marginBottom ko 24px se ghata kar 8px kar diya hai */}
+              <div className="header-title">
+                <h2 style={{ fontSize: "28px", fontWeight: "700", color: "#0f172a", margin: 0 }}>{pageTitle}</h2>
+                {pageSubtitle && <p style={{ color: "#64748b", marginTop: "2px", marginBottom: 0, fontSize: "14px" }}>{pageSubtitle}</p>}
+              </div>
+            </div>
+          )}
+          {children}
+        </main>
         <Footer />
       </div>
     </div>

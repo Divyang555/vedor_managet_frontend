@@ -53,7 +53,10 @@ const AddVendor = () => {
   };
 
   return (
-    <AdminLayout pageTitle="Add New Vendor" breadcrumbs={["Dashboard", "Vendors", "Add Vendor"]}>
+    <AdminLayout 
+    pageTitle="Add New Vendor" 
+    pageSubtitle="Create a secure entry portal configuration profile for registered entities."
+  >
       <form onSubmit={handleSave} className="form-layout-frame" style={{ flexDirection: "column" }}>
         <div style={{ display: "flex", gap: "24px", width: "100%", flexWrap: "wrap" }}>
           
@@ -108,17 +111,17 @@ const AddVendor = () => {
           <div className="form-section-column" style={{ minWidth: "300px" }}>
             <h4 className="section-headline">Account Information</h4>
             
-            {/* SAHI CODE */}
             <div className="input-group-item">
-            <label>Username</label>
-            <input 
+              <label>Username *</label>
+              <input 
                 type="text" 
                 name="username" 
                 className="base-input-text" 
-                value={formData.username || ""} // <-- Ensure karein ki .username yahan likha ho!
+                value={formData.username || ""} 
                 onChange={handleInputChange} 
                 placeholder="Enter username"
-            />
+              />
+              {errors.username && <span className="input-err-msg">{errors.username}</span>}
             </div>
             
             <div className="input-group-item">

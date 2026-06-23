@@ -47,7 +47,7 @@ const EditVendor = () => {
             mobile: data.mobile || "",
             gstNumber: data.gstNumber || "",
             address: data.address || data.addressLocation || "",
-            username: extractedUsername, // <-- FIXED HERE
+            username: extractedUsername,
             status: data.status || "Active"
           });
         }
@@ -86,7 +86,10 @@ const EditVendor = () => {
   }
 
   return (
-    <AdminLayout pageTitle="Edit Vendor" breadcrumbs={["Dashboard", "Vendors", "Edit Vendor"]}>
+    <AdminLayout 
+    pageTitle="Edit Vendor Details" 
+    pageSubtitle="Modify existing account credentials and official vendor information records."
+  >
       {errorBanner && <div className="alert-msg alert-error">{errorBanner}</div>}
       
       <form onSubmit={handleUpdate} className="form-layout-frame" style={{ flexDirection: "column", width: "100%" }}>
@@ -108,27 +111,27 @@ const EditVendor = () => {
             
             <div className="input-group-item">
               <label>Vendor Name *</label>
-              <input type="text" name="vendorName" className="base-input-text" value={formData.vendorName} onChange={handleInputChange}/>
+              <input type="text" name="vendorName" className="base-input-text" value={formData.vendorName} onChange={handleInputChange} placeholder="Enter vendor name"/>
             </div>
             
             <div className="input-group-item">
               <label>Email address *</label>
-              <input type="text" name="email" className="base-input-text" value={formData.email} onChange={handleInputChange}/>
+              <input type="text" name="email" className="base-input-text" value={formData.email} onChange={handleInputChange} placeholder="Enter email address"/>
             </div>
             
             <div className="input-group-item">
               <label>Mobile *</label>
-              <input type="text" name="mobile" className="base-input-text" value={formData.mobile} onChange={handleInputChange}/>
+              <input type="text" name="mobile" className="base-input-text" value={formData.mobile} onChange={handleInputChange} placeholder="Enter mobile number"/>
             </div>
             
             <div className="input-group-item">
               <label>GST Number *</label>
-              <input type="text" name="gstNumber" className="base-input-text" value={formData.gstNumber} onChange={handleInputChange}/>
+              <input type="text" name="gstNumber" className="base-input-text" value={formData.gstNumber} onChange={handleInputChange} placeholder="Enter GST number"/>
             </div>
             
             <div className="input-group-item">
               <label>Address Location</label>
-              <textarea name="address" className="base-textarea-text" rows="2" value={formData.address} onChange={handleInputChange}></textarea>
+              <textarea name="address" className="base-textarea-text" rows="2" value={formData.address} onChange={handleInputChange} placeholder="Enter address details"></textarea>
             </div>
           </div>
           

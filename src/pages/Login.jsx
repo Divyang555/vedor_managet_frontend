@@ -14,7 +14,7 @@ const initialErrors = {
 };
 
 const Login = () => {
-  const [form, setForm] = useState(initialState);
+  const [form, setForm]  = useState(initialState);
   const [errors, setErrors] = useState(initialErrors);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +29,7 @@ const Login = () => {
     if (!form.password.trim()) {
       validation.password = 'Password is required.';
     }
+    boxSizing: 'border-box';
     setErrors(validation);
     return !validation.username && !validation.password;
   };
@@ -48,16 +49,32 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await login({ username: form.username.trim(), password: form.password });
-      const { token, role } = response.data;
+      const { token, role, name, email } = response.data;
+      
+      // 1. Standard Token and Role Storage
       localStorage.setItem('token', token);
       localStorage.setItem('role', role);
+
+      // SAFE EMAIL EXTRACTION: 
+      // Agar backend response me email nahi hai, toh username@procuremanage.com bana dega
+      const dynamicEmail = email || (form.username.trim() ? `${form.username.trim().toLowerCase()}@procuremanage.com` : 'admin@procuremanage.com');
+      const dynamicName = name || form.username.trim() || 'Admin User';
+
+      localStorage.setItem('currentUser', JSON.stringify({
+        name: dynamicName,
+        email: dynamicEmail, // <-- Saved securely
+        role: role === 'ADMIN' ? 'Super Admin' : 'Vendor'
+      }));
+
       showToast({ title: 'Login successful.', message: 'Welcome back to ProcureManage.', variant: 'success' });
+      
       if (role === 'ADMIN') {
         navigate('/admin/dashboard');
       } else {
         navigate('/user/dashboard');
       }
     } catch (error) {
+      console.error("Login Error: ", error);
       showToast({ title: 'Authentication failed.', message: 'Invalid username or password.', variant: 'danger' });
     } finally {
       setLoading(false);

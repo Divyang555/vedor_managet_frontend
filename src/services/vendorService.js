@@ -20,12 +20,12 @@ const vendorService = {
   },
 
   // Ensure matching this specific profile path string template concatenation format
-getVendorById: async (id) => {
-  // Clear trace logs validation to make sure path compiles correctly
-  console.log("Request processing targets verification parameter ID code index: ", id);
-  const res = await axios.get(`${BASE_URL}/${id}`, getRequestConfig());
-  return res.data;
-},
+  getVendorById: async (id) => {
+    // Clear trace logs validation to make sure path compiles correctly
+    console.log("Request processing targets verification parameter ID code index: ", id);
+    const res = await axios.get(`${BASE_URL}/${id}`, getRequestConfig());
+    return res.data;
+  },
 
   createVendor: async (data) => {
     const res = await axios.post(BASE_URL, data, getRequestConfig());
@@ -49,6 +49,12 @@ getVendorById: async (id) => {
 
   deactivateVendor: async (id) => {
     const res = await axios.put(`${BASE_URL}/${id}/deactivate`, {}, getRequestConfig());
+    return res.data;
+  },
+
+  // FIXED: Added your dynamic dashboard total analytics counter method here seamlessly
+  getTotalVendorsCount: async () => {
+    const res = await axios.get(`${BASE_URL}/total`, getRequestConfig());
     return res.data;
   }
 };
