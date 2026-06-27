@@ -5,6 +5,7 @@ const Sidebar = () => {
   const location = useLocation();
 
   // Helper check function to highlight active tab gracefully
+  // Mapped strictly with singular/plural matching routing standards
   const isActive = (path) => (location.pathname.startsWith(path) ? "active" : "");
 
   return (
@@ -22,39 +23,48 @@ const Sidebar = () => {
       <div className="sidebar-menu-wrapper">
         <p className="menu-category-title">MANAGEMENT</p>
         <nav className="nav-section">
+          
+          {/* Dashboard Link */}
           <Link className={`nav-item ${location.pathname === "/admin/dashboard" ? "active" : ""}`} to="/admin/dashboard">
             <span className="material-symbols-outlined">dashboard</span>
             Dashboard
           </Link>
-          <a className="nav-item" href="#employees">
-            <span className="material-symbols-outlined">group</span>
-            Employees
-          </a>
           
-          {/* Linked directly to vendor module base endpoints route */}
+          {/* Employee Link */}
+          <Link className={`nav-item ${isActive("/admin/employees")}`} to="/admin/employees/add">
+            <span className="material-symbols-outlined">badge</span>
+            Employee
+          </Link>
+          
+          {/* Vendors Link */}
           <Link className={`nav-item ${isActive("/vendors")}`} to="/vendors">
             <span className="material-symbols-outlined">store</span>
             Vendors
           </Link>
           
-          {/* FIXED: Linked to your new Purchase Order Dashboard route with active state tracker */}
+          {/* Purchase Orders Link */}
           <Link className={`nav-item ${isActive("/admin/purchase-orders")}`} to="/admin/purchase-orders">
             <span className="material-symbols-outlined">shopping_cart</span>
             Purchase Orders
           </Link>
 
-          <a className="nav-item" href="#invoices">
+          {/* Invoices Link */}
+          <Link className={`nav-item ${isActive("/admin/invoice")}`} to="/admin/invoice/list">
             <span className="material-symbols-outlined">description</span>
             Invoices
-          </a>
-          <a className="nav-item" href="#payments">
+          </Link>
+
+          {/* 🚀 FIXED: Linked directly to your fresh Payments List endpoint with active layout tracking */}
+          <Link className={`nav-item ${isActive("/admin/payment")}`} to="/admin/payment/list">
             <span className="material-symbols-outlined">payments</span>
             Payments
-          </a>
-          <a className="nav-item" href="#deliveries">
+          </Link>
+          
+          {/* Deliveries Link */}
+          <Link className={`nav-item ${isActive("/admin/delivery")}`} to="/admin/delivery/list">
             <span className="material-symbols-outlined">local_shipping</span>
             Deliveries
-          </a>
+          </Link>
         </nav>
 
         <p className="menu-category-title">REPORTS</p>

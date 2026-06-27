@@ -12,6 +12,13 @@ const getRequestConfig = () => {
   };
 };
 
+const getConfig = () => ({
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json"
+    }
+});
+
 const purchaseOrderService = {
   // GET /admin/vendors
   getVendors: async () => {
@@ -54,7 +61,33 @@ const purchaseOrderService = {
   deletePurchaseOrder: async (id) => {
     const res = await axios.delete(`${BASE_URL}/purchase-orders/${id}`, getRequestConfig());
     return res.data;
-  }
+  },
+
+  // src/services/purchaseOrderService.js ke andar update method:
+    updatePurchaseOrder: async (id, poPayload) => {
+    const res = await axios.put(`${BASE_URL}/purchase-orders/${id}`, poPayload, getRequestConfig());
+    return res.data;
+    },
+
+    approvePurchaseOrder: async (id) => {
+    const res = await axios.put(
+        `${BASE_URL}/purchase-orders/${id}/approve`,
+        {},
+        getRequestConfig()
+    );
+    return res.data;
+},
+
+rejectPurchaseOrder: async (id) => {
+    const res = await axios.put(
+        `${BASE_URL}/purchase-orders/${id}/reject`,
+        {},
+        getRequestConfig()
+    );
+    return res.data;
+}
+
+
 };
 
 export default purchaseOrderService;

@@ -10,9 +10,9 @@ const VendorList = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
 
-  // CUSTOM HTML MODAL STATES
+  // CUSTOM HTML MODAL STATES FOR DEACTIVATION
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedVendorId, setSelectedVendorId] = useState(null);
+  const [selectedVendor, setSelectedVendor] = useState(null);
 
   useEffect(() => { 
     fetchVendors(); 
@@ -42,23 +42,24 @@ const VendorList = () => {
     }
   };
 
-  // Trigger custom modal instead of window.confirm
-  const openDeleteModal = (id) => {
-    setSelectedVendorId(id);
+  // ✅ FIXED: Delete modal open karne ki jagah ab Soft Deactivate confirmation state target karenge
+  const openDeactivateModal = (vendorObject) => {
+    setSelectedVendor(vendorObject);
     setModalOpen(true);
   };
 
-  // Execution call when clicking "Yes, Delete"
-  const confirmDeleteAction = async () => {
-    if (!selectedVendorId) return;
+  // ✅ FIXED: Physical deletion payload trigger ko update karke status field toggle hook mein change kiya
+  const confirmDeactivateAction = async () => {
+    if (!selectedVendor) return;
     try {
-      await vendorService.deleteVendor(selectedVendorId);
+      // Direct dynamic deactivation status service integration hit
+      await vendorService.deactivateVendor(selectedVendor.id);
       fetchVendors();
     } catch (err) { 
-      console.error("Error deleting vendor:", err); 
+      console.error("Error updates on structural status constraint:", err); 
     } finally {
       setModalOpen(false);
-      setSelectedVendorId(null);
+      setSelectedVendor(null);
     }
   };
 
@@ -212,7 +213,6 @@ const VendorList = () => {
                             <span className="material-symbols-outlined" style={{ fontSize: 16 }}>edit</span>
                           </button>
                           
-                          {/* Toggle status button configuration with correct evaluation params */}
                           <button 
                             className="op-btn" 
                             onClick={() => handleToggleStatus(v.id, isActive ? "Active" : "Inactive")} 
@@ -221,9 +221,15 @@ const VendorList = () => {
                             <span className="material-symbols-outlined" style={{ fontSize: 16 }}>lock_reset</span>
                           </button>
                           
-                          {/* Custom modal open link for delete configuration */}
-                          <button className="op-btn" onClick={() => openDeleteModal(v.id)} title="Delete">
-                            <span className="material-symbols-outlined" style={{ fontSize: 16, color: 'var(--status-inactive-txt)' }}>delete</span>
+                          {/* ✅ FIXED: Trigger modal window using safe structural object passing parameters */}
+                          <button 
+                            className="op-btn" 
+                            onClick={() => openDeactivateModal(v)} 
+                            title="Mark Inactive"
+                            disabled={!isActive}
+                            style={{ opacity: isActive ? 1 : 0.4 }}
+                          >
+                            <span className="material-symbols-outlined" style={{ fontSize: 16, color: isActive ? 'var(--status-inactive-txt)' : '#cbd5e1' }}>person_remove</span>
                           </button>
                         </div>
                       </td>
@@ -242,7 +248,7 @@ const VendorList = () => {
         )}
       </div>
 
-      {/* DYNAMIC HTML OVERLAY MODAL FOR DELETE CONFIRMATION */}
+      {/* DYNAMIC HTML OVERLAY MODAL FOR DEACTIVATION STATUS FLIP */}
       {modalOpen && (
         <div 
           className="modal-backdrop-blur"
@@ -290,11 +296,11 @@ const VendorList = () => {
             </div>
 
             <h3 style={{ fontSize: "18px", fontWeight: "700", color: "#0f172a", margin: "0 0 8px 0" }}>
-              Delete Vendor Profile
+              Deactivate Vendor Profile
             </h3>
             
             <p style={{ fontSize: "14px", color: "#64748b", margin: "0 0 24px 0", lineHeight: "1.5" }}>
-              Are you sure you want to delete this vendor record? This action will completely remove the data logs and cannot be undone.
+              Are you sure you want to mark vendor <strong className="text-dark">{selectedVendor?.vendorCode}</strong> as Inactive? This will suspend active transactions access layers safely.
             </p>
 
             {/* Modal Actions Footer Row */}
@@ -318,7 +324,7 @@ const VendorList = () => {
               </button>
               
               <button 
-                onClick={confirmDeleteAction}
+                onClick={confirmDeactivateAction}
                 style={{
                   flex: 1,
                   padding: "10px 16px",
@@ -332,7 +338,7 @@ const VendorList = () => {
                   outline: "none"
                 }}
               >
-                Yes, Delete
+                Yes, Deactivate
               </button>
             </div>
           </div>

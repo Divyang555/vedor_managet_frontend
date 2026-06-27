@@ -70,7 +70,13 @@ const Login = () => {
       
       if (role === 'ADMIN') {
         navigate('/admin/dashboard');
-      } else {
+
+      } else if( role === 'VENDOR') {
+        navigate('/vendor/dashboard');
+
+      }
+      
+      else {
         navigate('/user/dashboard');
       }
     } catch (error) {
